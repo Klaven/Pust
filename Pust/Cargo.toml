@@ -1,0 +1,7 @@
+[package]
+name = "Pust"
+version = "0.1.0"
+authors = ["marek counts <countsmarek@gmail.com>"]
+
+[dependencies]
+oping = "0.3.2"
