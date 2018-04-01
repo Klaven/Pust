@@ -1,9 +1,9 @@
-extern crate oping;
-use oping::{Ping, PingResult};
+extern crate pnet;
+//use oping::{Ping, PingResult};
 
 fn main() {
     println!("Hello, world!");
-
+    /*
     let mut ping = Ping::new();
     try!(ping.add_host("google.com"));
     let response = try!(ping.send());
@@ -19,4 +19,5 @@ fn main() {
             println!("  all details: {:?}", resp);
         }
     }
+    */
 }
