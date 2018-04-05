@@ -39,8 +39,16 @@ impl Ping {
     // add code here
 }
 
-fn newPing(sourceIp:Ipv4Addr,) -> &Ping {
+fn new_ping(source_ip:&Ipv4Addr) -> &Ping {
     Ping {
         id: rng.gen::<u32>(),
-        sequence: rng.gen::<u32>(), }
+        sequence: rng.gen::<u32>(),
+        addresses : Vec::new(),
+        network: "ip",
+        address: source_ip,
+        source: "",
+        source6: "",
+        has_ip_v4: true,
+        timeout: 5
+        }
 }
