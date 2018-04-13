@@ -1,4 +1,28 @@
 extern crate pnet;
+extern crate rand;
+extern crate pnet_datalink;
+
+use pnet::datalink::{pnet_datalink, NetworkInterface};
+use std::net::Ipv4Addr;
+use pnet::packet::Packet;
+use pnet::packet::arp::ArpPacket;
+use pnet::packet::ethernet::{EtherTypes, EthernetPacket, MutableEthernetPacket};
+use pnet::packet::icmpv6::Icmpv6Packet;
+use pnet::packet::icmp::{echo_reply, echo_request, IcmpPacket, IcmpTypes};
+use pnet::packet::ip::{IpNextHeaderProtocol, IpNextHeaderProtocols};
+use pnet::packet::ipv4::Ipv4Packet;
+use pnet::packet::ipv6::Ipv6Packet;
+use pnet::packet::tcp::TcpPacket;
+use pnet::packet::udp::UdpPacket;
+use pnet::util::MacAddr;
+
+use pnet_datalink::{Channel, NetworkInterface, MacAddr, ParseMacAddrErr};
+
+use std::env;
+use std::io::{self, Write};
+use std::process;
+use std::net::IpAddr;
+
 //use oping::{Ping, PingResult};
 
 fn main() {
@@ -7,7 +31,7 @@ fn main() {
     
 }
 
-fn send_arp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr, arp_operation: ArpOperation) {
+fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr, arp_operation: ArpOperation) {
     let(mut tx, _) = match pnet_datalink::channel(&interface, Default::default()) {
         Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
         Ok(_) => panic!("Unknown channel type"),

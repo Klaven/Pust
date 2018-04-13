@@ -6,3 +6,4 @@ authors = ["marek counts <countsmarek@gmail.com>"]
 [dependencies]
 pnet = "0.21.0"
 rand = "0.3.15"
+pnet_datalink = "0.21.0"

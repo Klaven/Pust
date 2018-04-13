@@ -10,3 +10,7 @@ Cargo.lock
 **/*.rs.bk
 Pust/target/debug/.cargo-lock
 Pust/target/debug/
+
+\.vscode/
+
+Pust/target/rls/debug/

@@ -211,8 +211,14 @@ fn main() {
                         // Maybe is TUN interface
                         let version = Ipv4Packet::new(&packet).unwrap().get_version();
                         if version == 4 {
+
+racer complete std::io::B
+
                             fake_ethernet_frame.set_destination(MacAddr(0,0,0,0,0,0));
-                            fake_ethernet_frame.set_source(MacAddr(0,0,0,0,0,0));
+                            fake_ethernet_frame.
+
+racer complete std::io::B
+set_source(MacAddr(0,0,0,0,0,0));
                             fake_ethernet_frame.set_ethertype(EtherTypes::Ipv4);
                             fake_ethernet_frame.set_payload(&packet);
                             handle_ethernet_frame(&interface, &fake_ethernet_frame.to_immutable());
