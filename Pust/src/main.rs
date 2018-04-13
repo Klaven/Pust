@@ -2,19 +2,18 @@ extern crate pnet;
 extern crate rand;
 extern crate pnet_datalink;
 
-use pnet::datalink::{pnet_datalink, NetworkInterface};
+use pnet::datalink::{self};
 use std::net::Ipv4Addr;
 use pnet::packet::Packet;
 use pnet::packet::arp::ArpPacket;
 use pnet::packet::ethernet::{EtherTypes, EthernetPacket, MutableEthernetPacket};
 use pnet::packet::icmpv6::Icmpv6Packet;
-use pnet::packet::icmp::{echo_reply, echo_request, IcmpPacket, IcmpTypes};
+use pnet::packet::icmp::{echo_reply, echo_request, IcmpPacket, IcmpTypes, MutableIcmpPacket};
 use pnet::packet::ip::{IpNextHeaderProtocol, IpNextHeaderProtocols};
 use pnet::packet::ipv4::Ipv4Packet;
 use pnet::packet::ipv6::Ipv6Packet;
 use pnet::packet::tcp::TcpPacket;
 use pnet::packet::udp::UdpPacket;
-use pnet::util::MacAddr;
 
 use pnet_datalink::{Channel, NetworkInterface, MacAddr, ParseMacAddrErr};
 
@@ -31,7 +30,17 @@ fn main() {
     
 }
 
-fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr, arp_operation: ArpOperation) {
+fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr) {
+       let(mut tx, _) = match pnet_datalink::channel(&interface, Default::default()) {
+        Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
+        Ok(_) => panic!("Unknown channel type"),
+        Err(e) => panic!("Error happened {}", e),
+    };
+
+    let mut buff = [0,0,0,0,0,0,0,0];
+    let mut packet = MutableIcmpPacket::new( &mut buff);
+    
+    /*
     let(mut tx, _) = match pnet_datalink::channel(&interface, Default::default()) {
         Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
         Ok(_) => panic!("Unknown channel type"),
@@ -61,8 +70,9 @@ fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac
     ethernet_packet.set_payload(arp_packet.packet_mut());
 
     tx.send_to(ethernet_packet.packet(), Some(interface));
+    */
 }
-
+/*
 fn main() {
     let iface_name = match env::args().nth(1) {
         Some(n) => n,
@@ -108,3 +118,4 @@ fn main() {
     
     println!("Sent ARP packet.");
 }
+*/
