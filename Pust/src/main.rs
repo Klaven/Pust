@@ -15,6 +15,8 @@ use pnet::packet::ipv6::Ipv6Packet;
 use pnet::packet::tcp::TcpPacket;
 use pnet::packet::udp::UdpPacket;
 
+use pnet::datalink::Channel::Ethernet;
+
 use pnet_datalink::{Channel, NetworkInterface, MacAddr, ParseMacAddrErr};
 
 use std::env;
@@ -25,9 +27,54 @@ use std::net::IpAddr;
 //use oping::{Ping, PingResult};
 
 fn main() {
-    println!("Hello, world!");
 
+    /*let iface_name = match env::args().nth(1) {
+        Some(n) => n,
+        None => {
+            writeln!(io::stderr(), "USAGE: packetdump <NETWORK INTERFACE>").unwrap();
+            process::exit(1);
+        },
+    };*/
+    let interface_names_match = |iface: &NetworkInterface| iface.name == "Marek";//iface_name;
     
+    let mut command = "";
+
+    for arg in env::args() {
+        match command {
+            "-i" => handle_interface_request(&arg),
+            _ => {command = match arg.as_ref() {
+                    "-i" => "-i",
+                    _ => ""
+                }
+            }
+        }
+    }
+
+    let args = env::args();
+
+    // Find the network interface with the provided name
+
+
+
+    let interfaces = datalink::interfaces();
+    let interface = interfaces.into_iter().filter(interface_names_match).next().unwrap();
+
+    // Create a channel to receive on
+    let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
+        Ok(Ethernet(tx, rx)) => (tx, rx),
+        Ok(_) => panic!("packetdump: unhandled channel type: {}"),
+        Err(e) => panic!("packetdump: unable to create channel: {}", e),
+    };
+    
+}
+
+fn handle_interface_request(arg:&String) {
+    if arg.eq("list") {
+
+        for interfaces in datalink::interfaces() {
+            println!("{}", interfaces);
+        }
+    }
 }
 
 fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr) {
@@ -39,7 +86,11 @@ fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac
 
     let mut buff = [0,0,0,0,0,0,0,0];
     let mut packet = MutableIcmpPacket::new( &mut buff);
+
     
+    
+    //let(mut tx, rx) = match pnet_datalink::channel(network_interface, configuration);
+
     /*
     let(mut tx, _) = match pnet_datalink::channel(&interface, Default::default()) {
         Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
