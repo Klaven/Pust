@@ -24,6 +24,8 @@ use std::io::{self, Write};
 use std::process;
 use std::net::IpAddr;
 
+mod ping;
+
 //use oping::{Ping, PingResult};
 
 fn main() {
@@ -42,8 +44,10 @@ fn main() {
     for arg in env::args() {
         match command {
             "-i" => handle_interface_request(&arg),
+            "-p" => handle_ping_request(&arg),
             _ => {command = match arg.as_ref() {
                     "-i" => "-i",
+                    "-p" => "-p",
                     _ => ""
                 }
             }
@@ -77,8 +81,15 @@ fn handle_interface_request(arg:&String) {
     }
 }
 
+fn handle_ping_request(arg:&String) {
+    
+    
+
+}
+
 fn send_icmp_packet(interface: NetworkInterface, source_ip: Ipv4Addr, source_mac: MacAddr, target_ip: Ipv4Addr, target_mac: MacAddr) {
-       let(mut tx, _) = match pnet_datalink::channel(&interface, Default::default()) {
+       
+    let(mut tx, rx) = match pnet_datalink::channel(&interface, Default::default()) {
         Ok(Channel::Ethernet(tx, rx)) => (tx, rx),
         Ok(_) => panic!("Unknown channel type"),
         Err(e) => panic!("Error happened {}", e),
