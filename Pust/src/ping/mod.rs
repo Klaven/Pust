@@ -20,26 +20,27 @@ use std::io::{self, Write};
 use std::process;
 use std::net::IpAddr;
 
+
 #[derive(Debug)]
 struct Ping {
     id: u32,
     sequence: u32,
-    addresses: Vec,
+    addresses: Vec<String>,
     address: Ipv4Addr,
-    network: &str,
-    source: &str,
-    source6: &str,
-    hasIPv4: bool,
-    timeout: u32,
+    network: String,
+    source: String,
+    source6: String,
+    hasIPv4: String,
+    timeout: String,
 
-    onReceived: fn(&Ipv4Addr, i64)
+    //onReceived: fn(&Ipv4Addr, i64)
 }
 
 impl Ping {
     // add code here
 }
-
-fn new_ping(source_ip:&Ipv4Addr) -> &Ping {
+/*
+fn new_ping(source_ip:&Ipv4Addr) -> Ping {
     Ping {
         id: rng.gen::<u32>(),
         sequence: rng.gen::<u32>(),
@@ -52,7 +53,9 @@ fn new_ping(source_ip:&Ipv4Addr) -> &Ping {
         timeout: 5
         }
 }
+*/
 
+/*
 fn handle_icmp_packet(interface_name: &str, source: IpAddr, destination: IpAddr, packet: &[u8]) {
     let icmp_packet = IcmpPacket::new(packet);
     if let Some(icmp_packet) = icmp_packet {
@@ -212,7 +215,7 @@ fn main() {
                         let version = Ipv4Packet::new(&packet).unwrap().get_version();
                         if version == 4 {
 
-racer complete std::io::B
+racer complete std::io::Bstr
 
                             fake_ethernet_frame.set_destination(MacAddr(0,0,0,0,0,0));
                             fake_ethernet_frame.
@@ -238,3 +241,4 @@ set_source(MacAddr(0,0,0,0,0,0));
         }
     }
 }
+*/

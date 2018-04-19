@@ -25,11 +25,12 @@ use std::process;
 use std::net::IpAddr;
 
 mod ping;
+mod interface;
 
 //use oping::{Ping, PingResult};
 
 fn main() {
-
+    let foo = datalink::interfaces();
     /*let iface_name = match env::args().nth(1) {
         Some(n) => n,
         None => {
@@ -58,7 +59,7 @@ fn main() {
 
     // Find the network interface with the provided name
 
-
+    let active = interface::get_active_interface();
 
     let interfaces = datalink::interfaces();
     let interface = interfaces.into_iter().filter(interface_names_match).next().unwrap();
