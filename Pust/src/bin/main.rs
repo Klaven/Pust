@@ -1,6 +1,7 @@
 extern crate pnet;
 extern crate rand;
 extern crate pnet_datalink;
+extern crate pustlib;
 
 use pnet::datalink::{self};
 use std::net::Ipv4Addr;
@@ -24,20 +25,12 @@ use std::io::{self, Write};
 use std::process;
 use std::net::IpAddr;
 
-mod ping;
-mod interface;
 
 //use oping::{Ping, PingResult};
 
 fn main() {
     let foo = datalink::interfaces();
-    /*let iface_name = match env::args().nth(1) {
-        Some(n) => n,
-        None => {
-            writeln!(io::stderr(), "USAGE: packetdump <NETWORK INTERFACE>").unwrap();
-            process::exit(1);
-        },
-    };*/
+
     let interface_names_match = |iface: &NetworkInterface| iface.name == "Marek";//iface_name;
     
     let mut command = "";
@@ -59,7 +52,7 @@ fn main() {
 
     // Find the network interface with the provided name
 
-    let active = interface::get_active_interface();
+    let active = pustlib::interface::get_active_interface();
 
     let interfaces = datalink::interfaces();
     let interface = interfaces.into_iter().filter(interface_names_match).next().unwrap();
@@ -75,10 +68,7 @@ fn main() {
 
 fn handle_interface_request(arg:&String) {
     if arg.eq("list") {
-
-        for interfaces in datalink::interfaces() {
-            println!("{}", interfaces);
-        }
+        pustlib::print_interfaces();
     }
 }
 
