@@ -29,12 +29,13 @@ use std::net::IpAddr;
 //use oping::{Ping, PingResult};
 
 fn main() {
-    let foo = datalink::interfaces();
 
-    let interface_names_match = |iface: &NetworkInterface| iface.name == "Marek";//iface_name;
+    /* maybe use `rout -n` to figure out active interface? */
+    let interface_names_match = |iface: &NetworkInterface| iface.name == "name";//iface_name;
     
     let mut command = "";
 
+    //Never really done this before... seems bad...
     for arg in env::args() {
         match command {
             "-i" => handle_interface_request(&arg),
@@ -55,14 +56,21 @@ fn main() {
     let active = pustlib::interface::get_active_interface();
 
     let interfaces = datalink::interfaces();
-    let interface = interfaces.into_iter().filter(interface_names_match).next().unwrap();
-
+    let mut active_interface : Option<datalink::NetworkInterface> = None;
+    for interface in interfaces {
+        if interface.ips.len() > 0 {
+            active_interface = Some(interface);
+        }
+    }
     // Create a channel to receive on
-    let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
-        Ok(Ethernet(tx, rx)) => (tx, rx),
-        Ok(_) => panic!("packetdump: unhandled channel type: {}"),
-        Err(e) => panic!("packetdump: unable to create channel: {}", e),
-    };
+    if let Some(active) = active {
+    
+        let (_, mut rx) = match datalink::channel(&active, Default::default()) {
+            Ok(Ethernet(tx, rx)) => (tx, rx),
+            Ok(_) => panic!("packetdump: unhandled channel type: {}"),
+            Err(e) => panic!("packetdump: unable to create channel: {}", e),
+        };
+    }
     
 }
 

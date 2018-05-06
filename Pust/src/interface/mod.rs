@@ -17,8 +17,9 @@ pub fn get_active_interface() -> Option<pnet_datalink::NetworkInterface> {
 
     let interfaces = datalink::interfaces();
 
-    let mut opt_inter : Option<pnet_datalink::NetworkInterface>;
+    let mut active_interface : Option<datalink::NetworkInterface> = None;
 
+    //currently just selects the last one in the list.
     for inter in interfaces {
         let thing = inter.mac_address();
         let thing2 = inter.is_up();
@@ -26,9 +27,8 @@ pub fn get_active_interface() -> Option<pnet_datalink::NetworkInterface> {
         if let Some(thing3) = thing3 {
             println!("{}",thing3);
         }
-        return Some(inter.clone());
+        active_interface = Some(inter.clone());
     }
 
-
-    return None; 
+    return active_interface; 
 }
